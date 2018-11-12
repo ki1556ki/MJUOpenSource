@@ -25,15 +25,20 @@
 
 import pefile
 
+# get 함수 선언
 def get(pe):
+	# 배열 선언
 	array = []
+	# 각 section값 마다 get_entropy() 함수를 호출
 	for section in pe.sections:
 		section.get_entropy()
+		# suspicious 의 값을 정함
 		if section.SizeOfRawData == 0 or (section.get_entropy() > 0 and section.get_entropy() < 1) or section.get_entropy() > 7:
 			suspicious = True
 		else:
 			suspicious = False
-
+		
+		# 아래와 같이 각 변수에 값을 대입
 		scn  = section.Name
 		scn  = unicode(scn, errors='replace')
 		md5  = section.get_hash_md5()
@@ -43,6 +48,7 @@ def get(pe):
 		vs   = hex(section.Misc_VirtualSize)
 		srd  = section.SizeOfRawData
 
+		# 배열에 추가
 		array.append({"name": scn, "hash_md5": md5, "hash_sha1": sha1, "suspicious": spc, "virtual_address": va, "virtual_size": vs, "size_raw_data": srd})
-
+	# 배열 
 	return array
