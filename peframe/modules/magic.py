@@ -39,11 +39,10 @@ class Magic:
         """
         Create a new libmagic wrapper.
 
-        mime - if True, mimetypes are returned instead of textual descriptions
-        mime_encoding - if True, codec is returned
-        magic_file - use a mime database other than the system default
-        keep_going - don't stop at the first match, keep going
-        uncompress - Try to look inside compressed files.
+        mime - 값이 True면, mimetypes이 textual descriptions을 대신해 반환
+        mime_encoding - True면, codec 반환
+        magic_file - 시스템 기본값 대신 mime database 사용
+        uncompress - 압축파일 uncompress
         """
         self.flags = MAGIC_NONE
         if mime:
@@ -58,13 +57,11 @@ class Magic:
 
         self.cookie = magic_open(self.flags)
         self.lock = threading.Lock()
-        
+
         magic_load(self.cookie, magic_file)
 
     def from_buffer(self, buf):
-        """
-        Identify the contents of `buf`
-        """
+        #`buf`의 내용물을 확인 및 리턴
         with self.lock:
             try:
                 return magic_buffer(self.cookie, buf)
@@ -72,10 +69,8 @@ class Magic:
                 return self._handle509Bug(e)
 
     def from_file(self, filename):
-        """
-        Identify the contents of file `filename`
-        raises IOError if the file does not exist
-        """
+        #`filename`의 내용물을 확인
+        #파일이 존재하지 않으면, IOError 발생
         if not os.path.exists(filename):
             raise IOError("File does not exist: " + filename)
         with self.lock:
@@ -85,23 +80,12 @@ class Magic:
                 return self._handle509Bug(e)
 
     def _handle509Bug(self, e):
-        # libmagic 5.09 has a bug where it might fail to identify the
-        # mimetype of a file and returns null from magic_file (and
-        # likely _buffer), but also does not return an error message.
+        #e의 message 값이 없고, self의 flags 와 MAGIC_MIME 값이 같으면 application/octet-stream을 리턴
         if e.message is None and (self.flags & MAGIC_MIME):
             return "application/octet-stream"
 
     def __del__(self):
-        # no _thread_check here because there can be no other
-        # references to this object at this point.
-
-        # during shutdown magic_close may have been cleared already so
-        # make sure it exists before using it.
-
-        # the self.cookie check should be unnecessary and was an
-        # incorrect fix for a threading problem, however I'm leaving
-        # it in because it's harmless and I'm slightly afraid to
-        # remove it.
+        # 두 값이 같으면 close하고, cookie값은 초기화
         if self.cookie and magic_close:
             magic_close(self.cookie)
             self.cookie = None
@@ -115,26 +99,12 @@ def _get_magic_type(mime):
     return i
 
 def from_file(filename, mime=False):
-    """"
-    Accepts a filename and returns the detected filetype.  Return
-    value is the mimetype if mime=True, otherwise a human readable
-    name.
-
-    >>> magic.from_file("testdata/test.pdf", mime=True)
-    'application/pdf'
-    """
+    #filname의 파일형식을 리턴, 리턴 value = mimetype
     m = _get_magic_type(mime)
     return m.from_file(filename)
 
 def from_buffer(buffer, mime=False):
-    """
-    Accepts a binary string and returns the detected filetype.  Return
-    value is the mimetype if mime=True, otherwise a human readable
-    name.
-
-    >>> magic.from_buffer(open("testdata/test.pdf").read(1024))
-    'PDF document, version 1.2'
-    """
+    #2진법 string의 파일타입을 리턴, 리턴 value = mimetype
     m = _get_magic_type(mime)
     return m.from_buffer(buffer)
 
@@ -142,10 +112,9 @@ def from_buffer(buffer, mime=False):
 
 
 libmagic = None
-# Let's try to find magic or magic1
+# libmagic 파일을 아래 셋중에 하나로 찾아서 dll파일에 저장. 만약 libmagic 파일이 없다면 Error 출력
 dll = ctypes.util.find_library('magic') or ctypes.util.find_library('magic1') or ctypes.util.find_library('cygmagic-1')
 
-# This is necessary because find_library returns None if it doesn't find the library
 if dll:
     libmagic = ctypes.CDLL(dll)
 
@@ -165,18 +134,17 @@ if not libmagic or not libmagic._name:
             pass
 
 if not libmagic or not libmagic._name:
-    # It is better to raise an ImportError since we are importing magic module
     raise ImportError('failed to find libmagic.  Check your installation')
 
 magic_t = ctypes.c_void_p
-
+#에러 체크 ( 에러가 없을 경우)
 def errorcheck_null(result, func, args):
     if result is None:
         err = magic_error(args[0])
         raise MagicException(err)
     else:
         return result
-
+#에러 체크 (에러가 있을경우)
 def errorcheck_negative_one(result, func, args):
     if result is -1:
         err = magic_error(args[0])
@@ -184,15 +152,10 @@ def errorcheck_negative_one(result, func, args):
     else:
         return result
 
-
+# 파일 이름 리턴 함수
 def coerce_filename(filename):
     if filename is None:
         return None
-
-    # ctypes will implicitly convert unicode strings to bytes with
-    # .encode('ascii').  If you use the filesystem encoding 
-    # then you'll get inconsistent behavior (crashes) depending on the user's
-    # LANG environment variable
     is_unicode = (sys.version_info[0] <= 2 and
                   isinstance(filename, unicode)) or \
                   (sys.version_info[0] >= 3 and

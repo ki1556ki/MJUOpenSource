@@ -23,7 +23,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ----------------------------------------------------------------------
 
-# About
+# 정보
 NAME	= "PEframe"
 VERSION	= "5.0.1"
 LICENSE = "MIT"
@@ -48,4 +48,3 @@ def help():
 	print "".ljust(4), "peframe --strings malware.exe"
 	print
 	print "Use 'stringsmatch.json' to configure your fuzzer."
-

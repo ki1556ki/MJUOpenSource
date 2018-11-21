@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------
 
 import string
-
+#아스키,숫자,구두점이나 공백을 char 형으로 형변환해주는 함수
 def convert_char(char):
     if char in string.ascii_letters or \
        char in string.digits or \
@@ -33,12 +33,12 @@ def convert_char(char):
         return char
     else:
         return r'\x%02x' % ord(char)
-
+#string 타입 을 출력해낼 수 있는 char 형으로 변환
 def convert_to_printable(s):
     return ''.join([convert_char(c) for c in s])
-            
+#각각의 pe나 entry 에 특정 value 값이 있으면, 각 value 값을 printable 로 변환하여 update
 def get(pe):
-	ret = {}	
+	ret = {}
 	if hasattr(pe, 'VS_VERSIONINFO'):
 	    if hasattr(pe, 'FileInfo'):
 	        for entry in pe.FileInfo:
@@ -50,5 +50,5 @@ def get(pe):
 	                for var_entry in entry.Var:
 	                    if hasattr(var_entry, 'entry'):
 	                        ret.update({convert_to_printable(var_entry.entry.keys()[0]): convert_to_printable(var_entry.entry.values()[0])})
-	
+
 	return ret

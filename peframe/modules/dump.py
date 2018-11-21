@@ -19,6 +19,6 @@
 
 import pefile
 import peutils
-
+#pe파일 받아와서 pe.dump_info 을 반환
 def get(pe):
 	return pe.dump_info()

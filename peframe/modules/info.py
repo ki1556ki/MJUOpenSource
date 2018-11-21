@@ -30,17 +30,16 @@ import xor
 
 import pefile
 import peutils
-
+# pe파일로부터 md5,sha1,hash 값 받아오는 함수
 def get_hash(pe, filename):
-	# Import Hash 
-	# https://www.mandiant.com/blog/tracking-malware-import-hashing/
+	# hash import
 	ih = pe.get_imphash()
-
-	# Thank to 'Christophe Monniez' for patched hash function
+	#file open
 	fh = open(filename, 'rb')
+	#md5,sha1 값 저장
 	m = hashlib.md5()
 	s = hashlib.sha1()
-	
+
 	while True:
 		data = fh.read(8192)
 		if not data:
@@ -53,12 +52,13 @@ def get_hash(pe, filename):
 	sha1 = s.hexdigest()
 
 	return md5,sha1,ih
-	
+
+#파일의 이름,크기,dll파일,섹션수,타임스탬프,시간을 받아 각 값에 저장
 def get(pe, filename):
 
 	fname = os.path.basename(filename)	# file name -> use (filename)
 	fsize = os.path.getsize(filename)	# file size (in byte) -> use (filename)
-	
+
 	dll   = pe.FILE_HEADER.IMAGE_FILE_DLL 	# dll -> use (pe)
 	nsec  = pe.FILE_HEADER.NumberOfSections	# num sections -> use (pe)
 
@@ -69,11 +69,11 @@ def get(pe, filename):
 	except:
 		""" return timestamp """
 		tsdate = str(tstamp) + " [Invalid date]"
-
-	md5, sha1, imphash = get_hash(pe, filename) # get md5, sha1, imphash -> (pe, filename)
+		#  md5, sha1, imphash => (pe, filename)
+		md5, sha1, imphash = get_hash(pe, filename)
 	# directory -> (pe)
 	dirlist = directories.get(pe)
-	
+
 	detected = []
 
 	for sign in dirlist:			# digital signature
@@ -95,7 +95,7 @@ def get(pe, filename):
 	antivirtualmachine = antivm.get(filename) # anti virtual machine
 	if antivirtualmachine:
 		detected.append("Anti VM")
-	
+
 	return json.dumps({"File Name": fname, \
 					"File Size": str(fsize), \
 					"Compile Time": str(tsdate), \
@@ -108,5 +108,5 @@ def get(pe, filename):
 					"Detected": detected, \
 					"Directories": dirlist
 					}, indent=4, separators=(',', ': '))
-					
+
 #	return [fname, str(fsize), str(tsdate), dll, nsec, md5, sha1, imphash, dirlist, detected]

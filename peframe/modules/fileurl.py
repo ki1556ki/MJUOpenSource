@@ -22,12 +22,12 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ----------------------------------------------------------------------
-
+##파일 내부에서 각종 URL을 추출하는 파일
 import re
 import json
 import string
 import stringstat
-
+#유효한 ip검사 유효한 ip가 아니면 False 리턴
 def valid_ip(address):
     try:
         host_bytes = address.split('.')
@@ -36,7 +36,7 @@ def valid_ip(address):
         return len(host_bytes) == 4 and len(valid) == 4
     except:
         return False
-
+#파일 이름과 string을 받아오는 함수 (파일의 딕셔너리, url과 ip의 리스트,fuzzing의 딕셔너리를 리턴)
 def get(filename, strings_match):
 	strings_info = json.loads(stringstat.get(filename))
 	strings_list = strings_info['content']
@@ -48,11 +48,11 @@ def get(filename, strings_match):
 	apialert_list = []
 	antidbg_list = []
 
-	# Get filetype and fuzzing
+	# 파일타입을 받아와서 Fuzzing(소프트웨어 있는 버그를 찾음)
 	file_type = strings_match['filetype'].items()
 	fuzzing_list = strings_match['fuzzing'].items()
 
-	# Strings analysis
+	# Strings 분석
 	for string in strings_list:
 		# URL list
 		urllist = re.findall(r'((smb|srm|ssh|ftps?|file|https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)', string, re.MULTILINE)
@@ -77,30 +77,30 @@ def get(filename, strings_match):
 	# Purge list
 	ip_list = filter(None, list(set([item for item in ip_list])))
 	url_list = filter(None, list(set([item for item in url_list])))
-	
+
 	# Initialize filetype
 	for key, value in file_type:
 		filetype_dict[key] = []
 
-	# Search for valid filename
+	# 유효한 파일 찾기
 	array_tmp = []
 	for file in file_list:
 		for key, value in file_type:
 			match = re.findall("\\"+value+"$", file, re.IGNORECASE | re.MULTILINE)
-			if match and file.lower() not in array_tmp and len(file) > 4: 
+			if match and file.lower() not in array_tmp and len(file) > 4:
 				filetype_dict[key].append(file)
 				array_tmp.append(file.lower())
-	
-	# Remove empty key filetype
+
+	# key의 파일타입이 빈경우 삭제
 	for key, value in filetype_dict.items():
 		if not filetype_dict[key]:
 			del filetype_dict[key]
 
-	# Initialize fuzzing
+	# fuzzing(버그 찾기)
 	for key, value in fuzzing_list:
 		fuzzing_dict[key] = []
 
-	# Strings analysis for fuzzing
+	# fuzzing 을 위해 스트링 분석
 	array_tmp = []
 	for string in strings_list:
 		for key, value in fuzzing_list:
@@ -109,15 +109,14 @@ def get(filename, strings_match):
 				fuzzing_dict[key].append(string)
 				array_tmp.append(string.lower())
 
-	# Remove empty key filetype
+	#빈 키,벨류의 파일타입 삭제
 	for key, value in filetype_dict.items():
 		if not filetype_dict[key]:
 			del filetype_dict[key]
 
-	# Remove empty key fuzzing
+	#빈 key값의 fuzzing 을 삭제
 	for key, value in fuzzing_list:
 		if not fuzzing_dict[key]:
 			del fuzzing_dict[key]
-	
+
 	return {"file":  filetype_dict, "url": url_list, "ip": ip_list, "fuzzing": fuzzing_dict}
-		

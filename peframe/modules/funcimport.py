@@ -36,20 +36,21 @@ def get(pe):
 			for imp in entry.imports:
 				address = hex(imp.address)
 				function = imp.name
-				
+				#dll파일이 라이브러리에 없을경우 dll 파일을 라이브러리에 추가
 				if dll not in library:
 					library.append(dll)
+				#library 값에 dll, address와 function에 각 값을 추가
 				array.append({"library": dll, "address": address, "function": function})
 
-		
+		#라이브러리에 키값을 리스트형식으로 저장
 		for key in library:
 			libdict[key] = []
-		
+		#라이브러리의 lib 리스트에 item 의 주소,함수를 추가
 		for lib in library:
 			for item in array:
 				if lib == item['library']:
 					libdict[lib].append({"address": item['address'], "function": item['function']})
 	except:
 		pass
-	
+
 	return libdict
