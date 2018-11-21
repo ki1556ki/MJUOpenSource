@@ -1,29 +1,8 @@
-#!/usr/bin/env python
-
-# ----------------------------------------------------------------------
-# The MIT License (MIT)
-#
-# Copyright (c) 2015 Gianni Amato
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy of
-# this software and associated documentation files (the "Software"), to deal in
-# the Software without restriction, including without limitation the rights to
-# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-# the Software, and to permit persons to whom the Software is furnished to do so,
-# subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-# ----------------------------------------------------------------------
-
 import pefile
+
+'''전체 메소드 설명 - 각 메소드마다 pefile형식을 pe파라미터로 받아 각 get_이름 대로로 변수를 만들어 처음에 DIRECTORY_ENTRY_이름[0]의 struct넣는다
+예외시 DIRECTORY_ENTRY_IMPORT의 struct를 넣는다 이것 또한 예외시 자DIRECTORY_ENTRY_IMPORT를 넣어주고 각각 리턴 만약 3개다 예외시 거짓 리턴'''
+
 
 def get_import(pe):
 	try:
@@ -108,5 +87,3 @@ def get_basereloc(pe):
 				return False
 
 	return basereloc
-
-

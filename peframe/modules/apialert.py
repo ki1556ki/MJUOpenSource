@@ -1,38 +1,17 @@
-#!/usr/bin/env python
-
-# ----------------------------------------------------------------------
-# The MIT License (MIT)
-#
-# Copyright (c) 2015 Gianni Amato
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy of
-# this software and associated documentation files (the "Software"), to deal in
-# the Software without restriction, including without limitation the rights to
-# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-# the Software, and to permit persons to whom the Software is furnished to do so,
-# subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-# ----------------------------------------------------------------------
-
+# json 형식 사용을 위한 임폴트
 import json
 
+# get함수, 각각의 반복문을 통해 apialert_found안에 문자열 삽입후 리스트형식으로 정렬하여 리턴값 반환.
 def get(pe, strings_match):
 	alerts = strings_match['apialert']
 	apialert_found = []
+	# pe에 DIRECTORY_ENTRY_IMPORT라는 변수가 있는지 확인하여 있으면 참 없으면 거짓.
 	if hasattr(pe, 'DIRECTORY_ENTRY_IMPORT'):
 		for lib in pe.DIRECTORY_ENTRY_IMPORT:
 			for imp in lib.imports:
 				for alert in alerts:
 					if alert: # remove 'null'
+						# imp.name의 문자열안에 alert의 문자열이 있을경우 apialert_found안의 맨뒤에 imp.name을 넣음
 						if str(imp.name).startswith(alert):
 							apialert_found.append(imp.name)
 

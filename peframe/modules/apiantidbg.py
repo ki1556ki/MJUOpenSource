@@ -1,33 +1,12 @@
-#!/usr/bin/env python
-
-# ----------------------------------------------------------------------
-# The MIT License (MIT)
-#
-# Copyright (c) 2015 Gianni Amato
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy of
-# this software and associated documentation files (the "Software"), to deal in
-# the Software without restriction, including without limitation the rights to
-# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-# the Software, and to permit persons to whom the Software is furnished to do so,
-# subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-# ----------------------------------------------------------------------
-
+# get함수, pe, strings_match를 파라미터로 가지며 array를 리스트로만들어 정렬한다음 리턴
 def get(pe, strings_match):
+	# antidbgs에 딕셔너리형식인strigns_match의 키값인 antidbg의 value값을 찾아서 넣어줌 
 	antidbgs = strings_match['antidbg']
 	array = []
+	# pe에 DIRECTORY_ENTRY_IMPORT변수가 있다면 참 없다면 거짓을 판별하여 DEI에 넣어줌
 	DEI   = hasattr(pe, 'DIRECTORY_ENTRY_IMPORT')
 	if DEI:
+		# array배열뒤에 imp.name을 넣어주는 반복알고리즘
 		for lib in pe.DIRECTORY_ENTRY_IMPORT:
 			for imp in lib.imports:
 				for antidbg in antidbgs:
@@ -36,4 +15,3 @@ def get(pe, strings_match):
 							array.append(imp.name)
 
 	return sorted(set(array))
-
