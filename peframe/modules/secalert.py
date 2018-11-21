@@ -1,37 +1,26 @@
-#!/usr/bin/env python
-
-# ----------------------------------------------------------------------
-# This file is part of PEframe.
-#
-# PEframe is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 2 of the License, or
-# (at your option) any later version.
-#
-# PEframe is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with PEframe. If not, see <http://www.gnu.org/licenses/>.
-# ----------------------------------------------------------------------
 
 try:
 	import pefile
 	import peutils
-except ImportError:
+except ImportError: # PE Header 보기위한 pefile,  peid의 DB파일사용을 위한 peutils import. 오류시 에러출력,
 	print 'Error: import pefile or peutils modules failed.'
 	exit(0)
 
 def get(pe):
 	array = []
-	for section in pe.sections:
+	for section in pe.sections: # pefile 기능 사용 각 섹션의 정보 확인.
 		if section.SizeOfRawData == 0 or (section.get_entropy() > 0 and section.get_entropy() < 1) or section.get_entropy() > 7:
-			sc   = section.Name
+			#엔트로피 정보가 0이거나 7 이상의 값이 나올경우 바이러스 검사
+
+			"""
+			엔트로피가 높은 데이터일수록 나타날 수 있는 모든 비트들이 고루 존재함을 의미하므로 어떤 압축 파일의
+			엔트로피 수치가 높을수록 압축률이 높다고 말할 수 있다
+			=> 압축율이 높은 파일 검사항목에 추가
+			"""
+
+			sc   = section.Name #섹션 이름, md5, sha1정보 변수 저장수 array 형식으로 입력
 			md5  = section.get_hash_md5()
 			sha1 = section.get_hash_sha1()
 			array.append({"Section": sc, "Hash MD5": md5, "Hash SHA-1": sha1})
 
 	return array
-
