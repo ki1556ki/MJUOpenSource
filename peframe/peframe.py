@@ -272,12 +272,11 @@ def stdoutput(get_info_from):
 
 				if item == 'directories':
 					print "Directories".ljust(15), ', '.join(output['pe_info'][item])
-
 				if item == 'sections_number':
 					if output['pe_info'][item] > 0:
 						x = 0
 						for suspicious in output['pe_info']['sections_info']:
-							if suspicious['suspicious']:
+					if suspicious['suspicious']:
 								x = x+1
 					print "Sections".ljust(15), output['pe_info'][item], '('+str(x)+' suspicious)'
 
@@ -453,6 +452,7 @@ def main():
 		return os.path.join(_ROOT, 'signatures', path)
 
 	# Load local file stringsmatch.json
+	# signatures 폴더에 있는 stringsmatch.json 파일을 load 하여 경로를 저장한다
 	fn_stringsmatch	= get_data('stringsmatch.json')
 	global strings_match
 	with open(fn_stringsmatch) as data_file:
@@ -468,9 +468,9 @@ def main():
 	if len(sys.argv) == 2:
 		filename = sys.argv[1]
 		isfile(filename)
-		fname = os.path.basename(filename)
-		fsize = os.path.getsize(filename)
-		ftype = filetype(filename)
+		fname = os.path.basename(filename) #파일 이름
+		fsize = os.path.getsize(filename) #파일 사이즈
+		ftype = filetype(filename) # 파일 타입
 		if re.match(r'^PE[0-9]{2}|^MS-DOS', ftype):
 			pe = pefile.PE(filename)
 			stdoutput(get_pe_fileinfo(pe, filename)); exit(0)

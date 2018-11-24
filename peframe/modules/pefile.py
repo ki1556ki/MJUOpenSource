@@ -25,7 +25,7 @@ __author__ = 'Ero Carrera'
 __version__ = '1.2.10-%d' % int( __revision__[21:-2] )
 __contact__ = 'ero.carrera@gmail.com'
 
-
+#import 구문
 import os
 import struct
 import time
@@ -36,7 +36,7 @@ import string
 import array
 import mmap
 import ordlookup
-
+#값 초기화
 sha1, sha256, sha512, md5 = None, None, None, None
 
 try:
@@ -74,6 +74,8 @@ fast_load = False
 # This will set a maximum length of a string to be retrieved from the file.
 # It's there to prevent loading massive amounts of data from memory mapped
 # files. Strings longer than 1MB should be rather rare.
+
+#변수 초기화
 MAX_STRING_LENGTH = 0x100000 # 2^20
 
 IMAGE_DOS_SIGNATURE             = 0x5A4D
@@ -90,7 +92,7 @@ IMAGE_ORDINAL_FLAG64            = 0x8000000000000000L
 OPTIONAL_HEADER_MAGIC_PE        = 0x10b
 OPTIONAL_HEADER_MAGIC_PE_PLUS   = 0x20b
 
-
+#딕셔너리 엔트리 타입 초기화
 directory_entry_types = [
     ('IMAGE_DIRECTORY_ENTRY_EXPORT',        0),
     ('IMAGE_DIRECTORY_ENTRY_IMPORT',        1),
@@ -108,10 +110,10 @@ directory_entry_types = [
     ('IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT',  13),
     ('IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR',14),
     ('IMAGE_DIRECTORY_ENTRY_RESERVED',      15) ]
-
+#딕셔너리 엔트리타입 변수 초기화
 DIRECTORY_ENTRY = dict([(e[1], e[0]) for e in directory_entry_types]+directory_entry_types)
 
-
+#image_characteristics의 값 초기화
 image_characteristics = [
     ('IMAGE_FILE_RELOCS_STRIPPED',          0x0001),
     ('IMAGE_FILE_EXECUTABLE_IMAGE',         0x0002),
@@ -130,10 +132,11 @@ image_characteristics = [
     ('IMAGE_FILE_UP_SYSTEM_ONLY',           0x4000),
     ('IMAGE_FILE_BYTES_REVERSED_HI',        0x8000) ]
 
+#image_characteristics 변수 초기화
 IMAGE_CHARACTERISTICS = dict([(e[1], e[0]) for e in
     image_characteristics]+image_characteristics)
 
-
+#section_characteristic의 값 초기화
 section_characteristics = [
     ('IMAGE_SCN_TYPE_REG',                  0x00000000), # reserved
     ('IMAGE_SCN_TYPE_DSECT',                0x00000001), # reserved
@@ -186,11 +189,11 @@ section_characteristics = [
     ('IMAGE_SCN_MEM_EXECUTE',               0x20000000),
     ('IMAGE_SCN_MEM_READ',                  0x40000000),
     ('IMAGE_SCN_MEM_WRITE',                 0x80000000L) ]
-
+#section_characteristics 변수 초기화
 SECTION_CHARACTERISTICS = dict([(e[1], e[0]) for e in
     section_characteristics]+section_characteristics)
 
-
+#디버그 타입 값들 초기화
 debug_types = [
     ('IMAGE_DEBUG_TYPE_UNKNOWN',        0),
     ('IMAGE_DEBUG_TYPE_COFF',           1),
@@ -204,10 +207,10 @@ debug_types = [
     ('IMAGE_DEBUG_TYPE_BORLAND',        9),
     ('IMAGE_DEBUG_TYPE_RESERVED10',     10),
     ('IMAGE_DEBUG_TYPE_CLSID',          11) ]
-
+#디버그 타입 변수 초기화
 DEBUG_TYPE = dict([(e[1], e[0]) for e in debug_types]+debug_types)
 
-
+#하위 시스템 타입 초기화
 subsystem_types = [
     ('IMAGE_SUBSYSTEM_UNKNOWN',                   0),
     ('IMAGE_SUBSYSTEM_NATIVE',                    1),
@@ -223,10 +226,10 @@ subsystem_types = [
     ('IMAGE_SUBSYSTEM_EFI_ROM',                  13),
     ('IMAGE_SUBSYSTEM_XBOX',                     14),
     ('IMAGE_SUBSYSTEM_WINDOWS_BOOT_APPLICATION', 16)]
-
+#하위 시스템 타입 변수 초기화
 SUBSYSTEM_TYPE = dict([(e[1], e[0]) for e in subsystem_types]+subsystem_types)
 
-
+#머신 타입 초기화
 machine_types = [
     ('IMAGE_FILE_MACHINE_UNKNOWN',  0),
     ('IMAGE_FILE_MACHINE_I386',     0x014c),
@@ -259,10 +262,10 @@ machine_types = [
     ('IMAGE_FILE_MACHINE_M32R',     0x9041),
     ('IMAGE_FILE_MACHINE_CEE',      0xc0ee),
  ]
-
+#머신 타입 변수 초기화
 MACHINE_TYPE = dict([(e[1], e[0]) for e in machine_types]+machine_types)
 
-
+#재배치 타입 초기화
 relocation_types = [
     ('IMAGE_REL_BASED_ABSOLUTE',        0),
     ('IMAGE_REL_BASED_HIGH',            1),
@@ -276,10 +279,10 @@ relocation_types = [
     ('IMAGE_REL_BASED_IA64_IMM64',      9),
     ('IMAGE_REL_BASED_DIR64',           10),
     ('IMAGE_REL_BASED_HIGH3ADJ',        11) ]
-
+#재배치 타입 변수 초기화
 RELOCATION_TYPE = dict([(e[1], e[0]) for e in relocation_types]+relocation_types)
 
-
+#dll 특징 초기화
 dll_characteristics = [
     ('IMAGE_LIBRARY_PROCESS_INIT',                     0x0001), # reserved
     ('IMAGE_LIBRARY_PROCESS_TERM',                     0x0002), # reserved
@@ -296,11 +299,11 @@ dll_characteristics = [
     ('IMAGE_DLLCHARACTERISTICS_WDM_DRIVER',            0x2000),
     ('IMAGE_DLLCHARACTERISTICS_GUARD_CF',              0x4000),
     ('IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE', 0x8000) ]
-
+#dll 특징 변수 초기화
 DLL_CHARACTERISTICS = dict([(e[1], e[0]) for e in dll_characteristics]+dll_characteristics)
 
 
-# Resource types
+# Resource types 초기화
 resource_type = [
     ('RT_CURSOR',          1),
     ('RT_BITMAP',          2),
@@ -323,7 +326,7 @@ resource_type = [
     ('RT_ANIICON',         22),
     ('RT_HTML',            23),
     ('RT_MANIFEST',        24) ]
-
+# Resource types 변수 초기화
 RESOURCE_TYPE = dict([(e[1], e[0]) for e in resource_type]+resource_type)
 
 
@@ -536,8 +539,10 @@ sublang =  [
 SUBLANG = dict(sublang+[(e[1], e[0]) for e in sublang])
 
 # Initialize the dictionary with all the name->value pairs
+# name->value 를 pair로 딕셔너리 초기화 한다
 SUBLANG = dict( sublang )
 # Now add all the value->name information, handling duplicates appropriately
+# SUBLANG 에 value->name 정보를 모두 추가한다.
 for sublang_name, sublang_value in sublang:
     if SUBLANG.has_key( sublang_value ):
         SUBLANG[ sublang_value ].append( sublang_name )
@@ -545,15 +550,17 @@ for sublang_name, sublang_value in sublang:
         SUBLANG[ sublang_value ] = [ sublang_name ]
 
 # Resolve a sublang name given the main lang name
-#
+# 
 def get_sublang_name_for_lang( lang_value, sublang_value ):
     lang_name = LANG.get(lang_value, '*unknown*')
     for sublang_name in SUBLANG.get(sublang_value, list()):
         # if the main language is a substring of sublang's name, then
         # return that
+        # 만약 sublang_name에 main language_name이 있으면 sublang_name을 반환 
         if lang_name in sublang_name:
             return sublang_name
     # otherwise return the first sublang name
+    # 없으면 첫 sublang name 반환
     return SUBLANG.get(sublang_value, ['*unknown*'])[0]
 
 
@@ -562,13 +569,13 @@ def get_sublang_name_for_lang( lang_value, sublang_value ):
 def parse_strings(data, counter, l):
     i = 0
     error_count = 0
-    while i < len(data):
+    while i < len(data): #data 의 길이만큼 반복
 
-        data_slice = data[i:i + 2]
-        if len(data_slice) < 2:
+        data_slice = data[i:i + 2] #data 를 2개식 잘라서 data_slice 에 초기화
+        if len(data_slice) < 2: #개수가 2개 미만이면 반복문 종료
             break
 
-        len_ = struct.unpack("<h", data_slice)[0]
+        len_ = struct.unpack("<h", data_slice)[0] #자른 data를 언팩킹 한다.
         i += 2
         if len_ != 0 and 0 <= len_*2 <= len(data):
             try:
@@ -581,18 +588,16 @@ def parse_strings(data, counter, l):
             i += len_ * 2
         counter += 1
 
-
+# 딕서너리에서 플래그들을 읽고 사용가능한 형식으로 반환
 def retrieve_flags(flag_dict, flag_filter):
     """Read the flags from a dictionary and return them in a usable form.
-
     Will return a list of (flag, value) for all flags in "flag_dict"
     matching the filter "flag_filter".
     """
-
     return [(f[0], f[1]) for f in flag_dict.items() if
             isinstance(f[0], str) and f[0].startswith(flag_filter)]
 
-
+# 오브젝트에서 적절하게 플래그들을 처리하고 속성들을 설정해 준다
 def set_flags(obj, flag_field, flags):
     """Will process the flags and set attributes in the object accordingly.
 
@@ -619,25 +624,27 @@ FileAlignment_Warning = False # We only want to print the warning once
 SectionAlignment_Warning = False # We only want to print the warning once
 
 
+""" UnicodeStringWrapperPostProcessor 클래스
+이 클래스는 유니코드 또는 파스칼 일 수 있는 문자열들을 식별하는데 도움을 주는 클래스이다.
+
+"""
 
 class UnicodeStringWrapperPostProcessor:
     """This class attempts to help the process of identifying strings
     that might be plain Unicode or Pascal. A list of strings will be
     wrapped on it with the hope the overlappings will help make the
     decision about their type."""
-
+    # 클래스 초기화
     def __init__(self, pe, rva_ptr):
         self.pe = pe
         self.rva_ptr = rva_ptr
         self.string = None
 
-
+    #self의 rva_prt값 getter
     def get_rva(self):
-        """Get the RVA of the string."""
-
         return self.rva_ptr
 
-
+    # escape 된 문자열의 아스키 표현을 반환
     def __str__(self):
         """Return the escaped ASCII representation of the string."""
 
@@ -652,20 +659,20 @@ class UnicodeStringWrapperPostProcessor:
 
         return ''
 
-
+    #this 를 none 으로 초기화
     def invalidate(self):
         """Make this instance None, to express it's no known string type."""
 
         self = None
 
-
+    # 파스칼16 렌더
     def render_pascal_16(self):
 
         self.string = self.pe.get_string_u_at_rva(
             self.rva_ptr+2,
             max_length=self.get_pascal_16_length())
 
-
+    # pascal_16 인지 확인
     def ask_pascal_16(self, next_rva_ptr):
         """The next RVA is taken to be the one immediately following this one.
 
@@ -681,12 +688,12 @@ class UnicodeStringWrapperPostProcessor:
 
         return False
 
-
+    # pascal 16의 길이 getter
     def get_pascal_16_length(self):
 
         return self.__get_word_value_at_rva(self.rva_ptr)
 
-
+    # rva 값 getter
     def __get_word_value_at_rva(self, rva):
 
         try:
@@ -700,7 +707,7 @@ class UnicodeStringWrapperPostProcessor:
         return struct.unpack('<H', data)[0]
 
 
-
+    # 유니코드 16인지 확인
     def ask_unicode_16(self, next_rva_ptr):
         """The next RVA is taken to be the one immediately following this one.
 
@@ -714,30 +721,30 @@ class UnicodeStringWrapperPostProcessor:
 
         return False
 
-
+    # 유니코드16 렌더
     def render_unicode_16(self):
         """"""
 
         self.string = self.pe.get_string_u_at_rva(self.rva_ptr)
 
-
+#pe 포멧 에러 클래스
 class PEFormatError(Exception):
     """Generic PE format error exception."""
-
+    #초기화
     def __init__(self, value):
         self.value = value
 
     def __str__(self):
         return repr(self.value)
 
-
+#pe 정보를 덤핑하는 클래스
 class Dump:
     """Convenience class for dumping the PE information."""
-
+    # 초기화
     def __init__(self):
         self.text = list()
 
-
+    #리스트에 라인들을 추가
     def add_lines(self, txt, indent=0):
         """Adds a list of lines.
 
@@ -746,7 +753,7 @@ class Dump:
         for line in txt:
             self.add_line(line, indent)
 
-
+    #라인 추가
     def add_line(self, txt, indent=0):
         """Adds a line.
 
@@ -755,7 +762,7 @@ class Dump:
 
         self.add(txt+'\n', indent)
 
-
+    #리스트에 텍스트 추가
     def add(self, txt, indent=0):
         """Adds some text, no newline will be appended.
 
@@ -777,32 +784,32 @@ class Dump:
 
         self.text.append( ' '*indent + txt )
 
-
+    #헤더 추가
     def add_header(self, txt):
         """Adds a header element."""
 
         self.add_line('-'*10+txt+'-'*10+'\n')
 
-
+    #개행 추가
     def add_newline(self):
         """Adds a newline."""
 
         self.text.append( '\n' )
 
-
+    #텍스트 반환
     def get_text(self):
         """Get the text in its current state."""
 
         return ''.join( self.text )
 
-
+#타입의 사이즈가 정의된 구조체
 STRUCT_SIZEOF_TYPES = {
     'x': 1, 'c': 1, 'b': 1, 'B': 1,
     'h': 2, 'H': 2,
     'i': 4, 'I': 4, 'l': 4, 'L': 4, 'f': 4,
     'q': 8, 'Q': 8, 'd': 8,
     's': 1 }
-
+#Structure 클래스
 class Structure:
     """Prepare structure object to extract members from data.
 
@@ -810,7 +817,7 @@ class Structure:
     of the structure.
     """
 
-
+    #초기화
     def __init__(self, format, name=None, file_offset=None):
         # Format is forced little endian, for big endian non Intel platforms
         self.__format__ = '<'
@@ -827,29 +834,29 @@ class Structure:
         else:
             self.name = format[0]
 
-
+    #포맷 반환
     def __get_format__(self):
         return self.__format__
-
+    #필드에 있는 offset 반환
     def get_field_absolute_offset(self, field_name):
         """Return the offset within the field for the requested field in the structure."""
         return self.__file_offset__ + self.__field_offsets__[field_name]
-
+    #요청한 필드의 관련된 offset 반환
     def get_field_relative_offset(self, field_name):
         """Return the offset within the structure for the requested field."""
         return self.__field_offsets__[field_name]
-
+    #파일 offset 반환
     def get_file_offset(self):
         return self.__file_offset__
-
+    #파일 offset 설정
     def set_file_offset(self, offset):
         self.__file_offset__ = offset
-
+    #언팩한 데이터가 전무 0이면 참을 반환
     def all_zeroes(self):
         """Returns true is the unpacked data is all zeros."""
 
         return self.__all_zeroes__
-
+    #타입의 사이즈 반환
     def sizeof_type(self, t):
         count = 1
         _t = t
@@ -858,7 +865,7 @@ class Structure:
             count = int( ''.join([d for d in t if d in string.digits]) )
             _t = ''.join([d for d in t if d not in string.digits])
         return STRUCT_SIZEOF_TYPES[_t] * count
-
+    #포맷 설정
     def __set_format__(self, format):
 
         offset = 0
@@ -886,13 +893,13 @@ class Structure:
 
         self.__format_length__ = struct.calcsize(self.__format__)
 
-
+    #길이 반환
     def sizeof(self):
         """Return size of the structure."""
 
         return self.__format_length__
 
-
+    #언팩킹
     def __unpack__(self, data):
 
         if len(data) > self.__format_length__:
@@ -916,7 +923,7 @@ class Structure:
                 #self.values[key] = self.__unpacked_data_elms__[i]
                 setattr(self, key, self.__unpacked_data_elms__[i])
 
-
+    #팩킹
     def __pack__(self):
 
         new_values = []
@@ -936,14 +943,14 @@ class Structure:
 
         return struct.pack(self.__format__, *new_values)
 
-
+    # 개행한 문자열 반환
     def __str__(self):
         return '\n'.join( self.dump() )
 
     def __repr__(self):
         return '<Structure: %s>' % (' '.join( [' '.join(s.split()) for s in self.dump()] ))
 
-
+    #structure의 대표 문자열 반환
     def dump(self, indentation=0):
         """Returns a string representation of the structure."""
 
@@ -972,7 +979,7 @@ class Structure:
                     self.__field_offsets__[key], key+':', val_str))
 
         return dump
-
+    #덤프한 딕셔너리 반환
     def dump_dict(self):
         """Returns a dictionary representation of the structure."""
 
@@ -1002,17 +1009,17 @@ class Structure:
         return dump_dict
 
 
-
+# SectionStructure(Structure) 클래스
 class SectionStructure(Structure):
     """Convenience section handling class."""
-
+    #초기화
     def __init__(self, *argl, **argd):
         if 'pe' in argd:
             self.pe = argd['pe']
             del argd['pe']
 
         Structure.__init__(self, *argl, **argd)
-
+    #데이터 반환
     def get_data(self, start=None, length=None):
         """Get data chunk from a section.
 
@@ -1045,7 +1052,7 @@ class SectionStructure(Structure):
 
         return self.pe.__data__[offset:end]
 
-
+    #attr setter
     def __setattr__(self, name, val):
 
         if name == 'Characteristics':
@@ -1062,13 +1069,13 @@ class SectionStructure(Structure):
 
         self.__dict__[name] = val
 
-
+    #offset의 rva 반환
     def get_rva_from_offset(self, offset):
         return offset - self.pe.adjust_FileAlignment( self.PointerToRawData,
             self.pe.OPTIONAL_HEADER.FileAlignment ) + self.pe.adjust_SectionAlignment( self.VirtualAddress,
             self.pe.OPTIONAL_HEADER.SectionAlignment, self.pe.OPTIONAL_HEADER.FileAlignment )
 
-
+    #rva 의 offset 반환
     def get_offset_from_rva(self, rva):
         return (rva -
             self.pe.adjust_SectionAlignment(
@@ -1079,7 +1086,7 @@ class SectionStructure(Structure):
                 self.PointerToRawData,
                 self.pe.OPTIONAL_HEADER.FileAlignment )
 
-
+    #offset을 가지고 있는지 확인
     def contains_offset(self, offset):
         """Check whether the section contains the file offset provided."""
 
@@ -1094,7 +1101,7 @@ class SectionStructure(Structure):
                             self.pe.OPTIONAL_HEADER.FileAlignment ) +
                                 self.SizeOfRawData )
 
-
+    # rva 가 있는지 확인
     def contains_rva(self, rva):
         """Check whether the section contains the address provided."""
 
@@ -1128,46 +1135,46 @@ class SectionStructure(Structure):
 
         return VirtualAddress_adj <= rva < VirtualAddress_adj + size
 
-
+    #self 의 rva가 있는지 확인
     def contains(self, rva):
         #print "DEPRECATION WARNING: you should use contains_rva() instead of contains()"
         return self.contains_rva(rva)
 
-
+    #섹션의 엔트로피를 계산하고 반환한다
     def get_entropy(self):
         """Calculate and return the entropy for the section."""
 
         return self.entropy_H( self.get_data() )
 
-
+    #sha1 값을 반환
     def get_hash_sha1(self):
         """Get the SHA-1 hex-digest of the section's data."""
 
         if sha1 is not None:
             return sha1( self.get_data() ).hexdigest()
 
-
+    #sha256 값을 반환
     def get_hash_sha256(self):
         """Get the SHA-256 hex-digest of the section's data."""
 
         if sha256 is not None:
             return sha256( self.get_data() ).hexdigest()
 
-
+    #sha512 값을 반환
     def get_hash_sha512(self):
         """Get the SHA-512 hex-digest of the section's data."""
 
         if sha512 is not None:
             return sha512( self.get_data() ).hexdigest()
-
-
+-
+    #md5 값을 반환
     def get_hash_md5(self):
         """Get the MD5 hex-digest of the section's data."""
 
         if md5 is not None:
             return md5( self.get_data() ).hexdigest()
 
-
+    #데이터의 엔트로피를 계산
     def entropy_H(self, data):
         """Calculate the entropy of a chunk of data."""
 
@@ -1188,10 +1195,10 @@ class SectionStructure(Structure):
         return entropy
 
 
-
+#데이터 컨데이너 클래스
 class DataContainer(object):
     """Generic data container."""
-
+    #초기화
     def __init__(self, **args):
         bare_setattr = super(DataContainer, self).__setattr__
         for key, value in args.items():
@@ -1206,7 +1213,7 @@ class ImportDescData(DataContainer):
     imports:    list of imported symbols (ImportData instances)
     struct:     IMAGE_IMPORT_DESCRIPTOR structure
     """
-
+#ImportData 클래스
 class ImportData(DataContainer):
     """Holds imported symbol's information.
 
@@ -1216,7 +1223,7 @@ class ImportData(DataContainer):
                 the address.
     """
 
-
+    #attr을 설정해줌
     def __setattr__(self, name, val):
 
         # If the instance doesn't yet have an ordinal attribute
@@ -1270,7 +1277,8 @@ class ExportDirData(DataContainer):
     struct:     IMAGE_EXPORT_DIRECTORY structure
     symbols:    list of exported symbols (ExportData instances)
 """
-
+# ExxportData 클래스
+# export된 data를 저장하는 클래스
 class ExportData(DataContainer):
     """Holds exported symbols' information.
 
@@ -1282,7 +1290,7 @@ class ExportData(DataContainer):
                 contain the name of the target symbol,
                 None otherwise.
     """
-
+    # attr setter
     def __setattr__(self, name, val):
 
         # If the instance doesn't yet have an ordinal attribute
@@ -1310,7 +1318,8 @@ class ExportData(DataContainer):
 
         self.__dict__[name] = val
 
-
+# ResourceDirData 클래스
+# resource directory의 정보를 저장하는 클래스
 class ResourceDirData(DataContainer):
     """Holds resource directory information.
 
@@ -1318,6 +1327,7 @@ class ResourceDirData(DataContainer):
     entries:    list of entries (ResourceDirEntryData instances)
     """
 
+# resource directory entry data를 저장하는 클래스
 class ResourceDirEntryData(DataContainer):
     """Holds resource directory entry data.
 
@@ -1345,20 +1355,20 @@ class ResourceDataEntryData(DataContainer):
     lang:       Primary language ID
     sublang:    Sublanguage ID
     """
-
+#디버그 data 를 저장하는 클래스
 class DebugData(DataContainer):
     """Holds debug information.
 
     struct:     IMAGE_DEBUG_DIRECTORY structure
     """
-
+#base relocation 정보를 저장하는 클래스
 class BaseRelocationData(DataContainer):
     """Holds base relocation information.
 
     struct:     IMAGE_BASE_RELOCATION structure
     entries:    list of relocation data (RelocationData instances)
     """
-
+#relpcation 정보를 저장하는 클래스
 class RelocationData(DataContainer):
     """Holds relocation information.
 
@@ -1367,6 +1377,7 @@ class RelocationData(DataContainer):
                 RELOCATION_TYPE[type]
     rva:        RVA of the relocation
     """
+    # attr setter
     def __setattr__(self, name, val):
 
         # If the instance doesn't yet have a struct attribute
@@ -1392,12 +1403,13 @@ class RelocationData(DataContainer):
 
         self.__dict__[name] = val
 
+#Tls 정보를 저장하는 클래스
 class TlsData(DataContainer):
     """Holds TLS information.
 
     struct:     IMAGE_TLS_DIRECTORY structure
     """
-
+#bound import descriptor data를 저장하는 클래스
 class BoundImportDescData(DataContainer):
     """Holds bound import descriptor data.
 
@@ -1415,14 +1427,14 @@ class BoundImportDescData(DataContainer):
                 symbols. If so, the destination DLL will have an
                 entry in this list.
     """
-
+# Load Config data를 저장하는 클래스
 class LoadConfigData(DataContainer):
     """Holds Load Config data.
 
     struct:     IMAGE_LOAD_CONFIG_DIRECTORY structure
     name:       dll name
     """
-
+# bound import forwarder reference data를 저장하는 클래스
 class BoundImportRefData(DataContainer):
     """Holds bound import forwarder reference data.
 
@@ -1441,7 +1453,9 @@ class BoundImportRefData(DataContainer):
 #
 # The filename length is not checked because the DLLs filename
 # can be longer that the 8.3
+
 allowed_filename = string.lowercase + string.uppercase + string.digits + "!#$%&'()-@^_`{}~+,.;=[]" + ''.join( [chr(i) for i in range(128, 256)] )
+# 유효한 파일이름인지 확인
 def is_valid_dos_filename(s):
     if s is None or not isinstance(s, str):
         return False
@@ -1456,6 +1470,7 @@ def is_valid_dos_filename(s):
 # we will assume the name is invalid
 #
 allowed_function_name = string.lowercase + string.uppercase + string.digits + '_?@$()'
+# 유효한 함수이름인지 확인
 def is_valid_function_name(s):
     if s is None or not isinstance(s, str):
         return False
@@ -1465,7 +1480,7 @@ def is_valid_function_name(s):
     return True
 
 
-
+# PE 클래스
 class PE:
     """A Portable Executable representation.
 
@@ -1537,7 +1552,7 @@ class PE:
 
     #
     # Format specifications for PE structures.
-    #
+    # PE조의 포맷들 정의
 
     __IMAGE_DOS_HEADER_format__ = ('IMAGE_DOS_HEADER',
         ('H,e_magic', 'H,e_cblp', 'H,e_cp',
@@ -1730,8 +1745,8 @@ class PE:
     __IMAGE_BOUND_FORWARDER_REF_format__ = ('IMAGE_BOUND_FORWARDER_REF',
         ('I,TimeDateStamp', 'H,OffsetModuleName', 'H,Reserved') )
 
-
-    def __init__(self, name=None, data=None, fast_load=None):
+    # 초기화
+    def __init__(self, name=None, data=None, fast_load=None):
 
         self.sections = []
 
@@ -1756,14 +1771,14 @@ class PE:
             self.close()
             raise
 
-
+    #파일을 close 한다
     def close(self):
         if ( self.__from_file is True and hasattr(self, '__data__') and
             ((isinstance(mmap.mmap, type) and isinstance(self.__data__, mmap.mmap)) or
            'mmap.mmap' in repr(type(self.__data__))) ):
                 self.__data__.close()
 
-
+    #data를 언패킹한다
     def __unpack_data__(self, format, data, file_offset):
         """Apply structure format to raw data.
 
@@ -1784,7 +1799,7 @@ class PE:
 
         return structure
 
-
+    # pe 파일을 파싱한다
     def __parse__(self, fname, data, fast_load):
         """Parse a Portable Executable file.
 
@@ -2095,7 +2110,7 @@ class PE:
             else:
                 self.RICH_HEADER = None
 
-
+    #reach header 을 파싱한다
     def parse_rich_header(self):
         """Parses the rich header
         see http://www.ntcore.com/files/richsign.htm for more information
@@ -2151,7 +2166,7 @@ class PE:
             headervalues += [data[2 * i] ^ checksum, data[2 * i + 1] ^ checksum]
         return result
 
-
+    # 경고 getter
     def get_warnings(self):
         """Return the list of warnings.
 
@@ -2162,7 +2177,7 @@ class PE:
 
         return self.__warnings
 
-
+    # 경고를 보여준다
     def show_warnings(self):
         """Print the list of warnings.
 
@@ -2174,7 +2189,7 @@ class PE:
         for warning in self.__warnings:
             print '>', warning
 
-
+    # data directories를 실행한다
     def full_load(self):
         """Process the data directories.
 
@@ -2184,7 +2199,7 @@ class PE:
 
         self.parse_data_directories()
 
-
+    # PE파일을 쓴다
     def write(self, filename=None):
         """Write the PE file.
 
@@ -4176,7 +4191,7 @@ class PE:
 
         return s
 
-
+    #주어진 주소에 위치한 유니코드 문자열 리턴
     def get_string_u_at_rva(self, rva, max_length = 2**16):
         """Get an Unicode string located at the given address."""
 
