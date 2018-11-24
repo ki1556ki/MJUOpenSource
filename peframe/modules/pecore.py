@@ -43,69 +43,69 @@ import directory
 
 global filename
 global pe
-
+# 정보 getter
 def get_info(pe, filename):
 	show_info = json.loads(info.get(pe, filename))
 	return json.dumps({"Short Info": show_info}, indent=4, separators=(',', ': '))
-
+# cert getter
 def get_cert(pe):
 	show_cert = json.loads(cert.get(pe))
 	return json.dumps({"Digital Signature": show_cert}, indent=4, separators=(',', ': '))
-
+# 패커 getter
 def get_packer(pe):
 	show_packer = peid.get(pe)
 	return json.dumps({"Packer": show_packer}, indent=4, separators=(',', ': '))
-
+# 안티 debug getter
 def get_antidbg(pe):
 	show_antidbg = apiantidbg.get(pe)
 	return json.dumps({"Anti Debug": show_antidbg}, indent=4, separators=(',', ': '))
-
+# xor getter
 def get_xor(pe):
 	show_xor = xor.get(pe)
 	return json.dumps({"Xor": show_xor[0], "Offset": show_xor[1]}, indent=4, separators=(',', ': '))
-		
+# anti vm getter		
 def get_antivm(filename):
 	show_antivm = antivm.get(filename)
 	return json.dumps({"Anti VM": show_antivm}, indent=4, separators=(',', ': '))
-	
+# api alert getter	
 def get_apialert(pe):
 	show_apialert = apialert.get(pe)
 	return json.dumps({"Suspicious API": show_apialert}, indent=4, separators=(',', ': '))
-		
+# secalert getter		
 def get_secalert(pe):
 	show_secalert = secalert.get(pe)
 	return json.dumps({"Suspicious Sections": show_secalert}, indent=4, separators=(',', ': '))
-
+# 파일 url getter
 def get_fileurl(filename):
 	show_fileurl = fileurl.get(filename)
 	return json.dumps({"File Name": show_fileurl[0], "Url": show_fileurl[1]}, indent=4, separators=(',', ': '))
-	
+#meta getter		
 def get_meta(pe):
 	show_meta = meta.get(pe)
 	return json.dumps({"Meta Data": show_meta}, indent=4, separators=(',', ': '))
 
 
 # Options
-
+#import getter
 def get_import(pe):
 	show_import = funcimport.get(pe)
 	return json.dumps({"Imported Functions": show_import}, indent=4, separators=(',', ': '))
-
+# export getter
 def get_export(pe):
 	show_export = funcexport.get(pe)
 	return json.dumps({"Exported Functions": show_export}, indent=4, separators=(',', ': '))
-
+#sections getter
 def get_sections(pe):
 	show_sections = sections.get(pe)
 	return json.dumps({"Sections": show_sections}, indent=4, separators=(',', ': '))
-
+# string getter
 def get_strings(filename):
 	show_strings = strings.get(filename)
 	return show_strings
-
+# dump getter
 def get_dump(pe):
 	return dump.get(pe)
-
+# 디렉토리 getter
 def get_dir(pe, d):
 	if d == "import":
 		return directory.get_import(pe)

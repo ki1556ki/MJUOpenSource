@@ -2301,7 +2301,7 @@ class PE:
         else:
             return new_file_data
 
-
+    # PE파일 섹션을 fetch 한다
     def parse_sections(self, offset):
         """Fetch the PE file sections.
 
@@ -2415,7 +2415,7 @@ class PE:
             return offset
 
 
-
+    # PE파일의 data directories를 파싱하고 실행한다.
     def parse_data_directories(self, directories=None):
         """Parse and process the PE file's data directories.
 
@@ -2476,7 +2476,7 @@ class PE:
                 directories.remove(directory_index)
 
 
-
+    #directory 를 파싱하고 imports를 바운딩 한다.
     def parse_directory_bound_imports(self, rva, size):
         """"""
 
@@ -2580,7 +2580,7 @@ class PE:
 
         return bound_imports
 
-
+    # tls directory 를 파싱한다
     def parse_directory_tls(self, rva, size):
         """"""
 
@@ -2606,7 +2606,7 @@ class PE:
 
         return TlsData( struct = tls_struct )
 
-
+    # load_config 를 파싱한다
     def parse_directory_load_config(self, rva, size):
         """"""
 
