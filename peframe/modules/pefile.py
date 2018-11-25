@@ -5324,7 +5324,7 @@ class PE:
     # "The alignment (in bytes) of sections when they are loaded into memory. It must be
     #  greater than or equal to FileAlignment. The default is the page size for the
     #  architecture."
-    #
+    # section alignment 를 조정한다
     def adjust_SectionAlignment( self, val, section_alignment, file_alignment ):
         global SectionAlignment_Warning
         if file_alignment < FILE_ALIGNEMNT_HARDCODED_VALUE:
