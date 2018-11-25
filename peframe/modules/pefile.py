@@ -2199,7 +2199,7 @@ class PE:
 
         self.parse_data_directories()
 
-    # PE파일을 쓴다
+    # PE파일을 write 함
     def write(self, filename=None):
         """Write the PE file.
 
@@ -2632,7 +2632,7 @@ class PE:
 
         return LoadConfigData( struct = load_config_struct )
 
-
+    #elocations_directory를 파싱한다
     def parse_relocations_directory(self, rva, size):
         """"""
 
@@ -2689,7 +2689,7 @@ class PE:
 
         return relocations
 
-
+    # relocations을 파싱한다
     def parse_relocations(self, data_rva, rva, size):
         """"""
 
@@ -2730,7 +2730,7 @@ class PE:
 
         return entries
 
-
+    # debug directory를 파싱한다
     def parse_debug_directory(self, rva, size):
         """"""
 
@@ -2759,7 +2759,7 @@ class PE:
 
         return debug
 
-
+    #resources directory를 파싱한다
     def parse_resources_directory(self, rva, size=0, base_rva = None, level = 0, dirs=None):
         """Parse the resources directory.
 
@@ -3001,7 +3001,7 @@ class PE:
 
         return resource_directory_data
 
-
+    # resources directory 에서 data entry를 파싱한다
     def parse_resource_data_entry(self, rva):
         """Parse a data entry from the resources directory."""
 
@@ -3021,7 +3021,7 @@ class PE:
 
         return data_entry
 
-
+    # resources directory 에서 directory entry를 파싱한다
     def parse_resource_entry(self, rva):
         """Parse a directory entry from the resources directory."""
 
@@ -3049,7 +3049,7 @@ class PE:
 
         return resource
 
-
+    # version information structure 을 파싱한다
     def parse_version_information(self, version_struct):
         """Parse version information structure.
 
@@ -3390,7 +3390,7 @@ class PE:
                 break
 
 
-
+    # export directory를 파싱한다.
     def parse_export_directory(self, rva, size):
         """Parse the export directory.
 
@@ -3556,11 +3556,11 @@ class PE:
                 struct = export_dir,
                 symbols = exports)
 
-
+    #??
     def dword_align(self, offset, base):
         return ((offset+base+3) & 0xfffffffcL) - (base & 0xfffffffcL)
 
-
+    # import directory 의 딜레이를 파싱한다
     def parse_delay_import_directory(self, rva, size):
         """Walk and parse the delay import directory."""
 
@@ -3629,7 +3629,7 @@ class PE:
 
         return import_descs
 
-
+    # imphash 값 getter
     def get_imphash(self):
         impstrs = []
         exts = ['ocx', 'sys', 'dll']
@@ -3657,7 +3657,7 @@ class PE:
 
         return hashlib.md5( ','.join( impstrs ) ).hexdigest()
 
-
+    # import directory를 파싱한다
     def parse_import_directory(self, rva, size):
         """Walk and parse the import directory."""
 
@@ -3738,7 +3738,7 @@ class PE:
         return import_descs
 
 
-
+    # import한 symbol들을 파싱한다
     def parse_imports(self, original_first_thunk, first_thunk, forwarder_chain, max_length=None):
         """Parse the imported symbols.
 
@@ -3884,7 +3884,7 @@ class PE:
         return imported_symbols
 
 
-
+    # import table getter
     def get_import_table(self, rva, max_length=None):
 
         table = []
@@ -3978,7 +3978,7 @@ class PE:
 
         return table
 
-
+    # 이미지에 매핑된 메모리 getter
     def get_memory_mapped_image(self, max_virtual_address=0x10000000, ImageBase=None):
         """Returns the data corresponding to the memory layout of the PE file.
 
@@ -4051,7 +4051,7 @@ class PE:
 
         return mapped_data
 
-
+    # resource 내의 string들을 반환
     def get_resources_strings(self):
         """Returns a list of all the strings found withing the resources (if any).
 
@@ -4075,7 +4075,7 @@ class PE:
 
         return resources_strings
 
-
+    #data getter
     def get_data(self, rva=0, length=None):
         """Get data regardless of the section where it lies on.
 
@@ -4110,7 +4110,7 @@ class PE:
 
         return s.get_data(rva, length)
 
-
+    #offset으로 부터 rva 반환
     def get_rva_from_offset(self, offset):
         """Get the RVA corresponding to this file offset. """
 
@@ -4133,7 +4133,7 @@ class PE:
                 return offset
             #raise PEFormatError("specified offset (0x%x) doesn't belong to any section." % offset)
         return s.get_rva_from_offset(offset)
-
+    # rva로 부터 offset 반환
     def get_offset_from_rva(self, rva):
         """Get the file offset corresponding to this RVA.
 
@@ -4155,7 +4155,7 @@ class PE:
 
         return s.get_offset_from_rva(rva)
 
-
+    # rva 에서 string 반환
     def get_string_at_rva(self, rva):
         """Get an ASCII string located at the given address."""
 
@@ -4168,7 +4168,7 @@ class PE:
 
         return self.get_string_from_data( 0, s.get_data(rva, length=MAX_STRING_LENGTH) )
 
-
+    # data에서 string 반환
     def get_string_from_data(self, offset, data):
         """Get an ASCII string from within the data."""
 
@@ -4215,7 +4215,7 @@ class PE:
 
         return s
 
-
+    # offset을 포함한 section을 반환
     def get_section_by_offset(self, offset):
         """Get the section containing the given file offset."""
 
@@ -4226,7 +4226,7 @@ class PE:
 
         return None
 
-
+    # rva에서 section 반환
     def get_section_by_rva(self, rva):
         """Get the section containing the given address."""
 
@@ -4236,16 +4236,16 @@ class PE:
             return sections[0]
 
         return None
-
+    # 정보 반환
     def __str__(self):
         return self.dump_info()
 
-
+    # 정보 출력
     def print_info(self):
         """Print all the PE header information in a human readable from."""
         print self.dump_info()
 
-
+    # 정보를 덤핑하여 반환
     def dump_info(self, dump=None):
         """Dump all the PE header information into human readable string."""
 
@@ -4553,7 +4553,7 @@ class PE:
 
         return dump.get_text()
 
-
+    # 딕서너리에 있는 모든 PE헤더 정보를 덤핑후 반환
     def dump_dict(self, dump=None):
         """Dump all the PE header information into a dictionary."""
 
@@ -4615,13 +4615,13 @@ class PE:
             for idx in xrange(len(self.OPTIONAL_HEADER.DATA_DIRECTORY)):
                 directory = self.OPTIONAL_HEADER.DATA_DIRECTORY[idx]
                 dump_dict['Directories'].append(directory.dump_dict())
-
+        #char로 변환
         def convert_char(char):
             if char in string.ascii_letters or char in string.digits or char in string.punctuation or char in string.whitespace:
                 return char
             else:
                 return r'\x%02x' % ord(char)
-
+        # 출력 가능하게 변환
         def convert_to_printable(s):
             return ''.join([convert_char(c) for c in s])
 
@@ -4817,6 +4817,7 @@ class PE:
 
 
     # OC Patch
+    # rva에서 물리적 주소 반환
     def get_physical_by_rva(self, rva):
         """Gets the physical address in the PE file from an RVA value."""
         try:
@@ -4828,12 +4829,12 @@ class PE:
     ##
     # Double-Word get / set
     ##
-
+    # dword로브투 데이터를 반환
     def get_data_from_dword(self, dword):
         """Return a four byte string representing the double word value. (little endian)."""
         return struct.pack('<L', dword & 0xffffffff)
 
-
+    #data 로부터 dword 를 반환
     def get_dword_from_data(self, data, offset):
         """Convert four bytes of data to a double word (little endian)
 
@@ -4848,7 +4849,7 @@ class PE:
 
         return struct.unpack('<I', data[offset*4:(offset+1)*4])[0]
 
-
+    #rva에서 dword 반환
     def get_dword_at_rva(self, rva):
         """Return the double word value at the given RVA.
 
@@ -4861,7 +4862,7 @@ class PE:
         except PEFormatError:
             return None
 
-
+    #offset으로부터 dword 반환
     def get_dword_from_offset(self, offset):
         """Return the double word value at the given file offset. (little endian)"""
 
@@ -4870,12 +4871,12 @@ class PE:
 
         return self.get_dword_from_data(self.__data__[offset:offset+4], 0)
 
-
+    # dword 값을 rva로 set
     def set_dword_at_rva(self, rva, dword):
         """Set the double word value at the file offset corresponding to the given RVA."""
         return self.set_bytes_at_rva(rva, self.get_data_from_dword(dword))
 
-
+    # dword 값을 offset로 set
     def set_dword_at_offset(self, offset, dword):
         """Set the double word value at the given file offset."""
         return self.set_bytes_at_offset(offset, self.get_data_from_dword(dword))
@@ -4885,12 +4886,12 @@ class PE:
     ##
     # Word get / set
     ##
-
+    # word 에서 data 를 반환
     def get_data_from_word(self, word):
         """Return a two byte string representing the word value. (little endian)."""
         return struct.pack('<H', word)
 
-
+    # data 에서 word를 반환
     def get_word_from_data(self, data, offset):
         """Convert two bytes of data to a word (little endian)
 
@@ -4905,7 +4906,7 @@ class PE:
 
         return struct.unpack('<H', data[offset*2:(offset+1)*2])[0]
 
-
+    # rva에서 word 반환
     def get_word_at_rva(self, rva):
         """Return the word value at the given RVA.
 
@@ -4918,7 +4919,7 @@ class PE:
         except PEFormatError:
             return None
 
-
+    # offset 에서 word 반환
     def get_word_from_offset(self, offset):
         """Return the word value at the given file offset. (little endian)"""
 
@@ -4927,7 +4928,7 @@ class PE:
 
         return self.get_word_from_data(self.__data__[offset:offset+2], 0)
 
-
+    # word를 rva로 설정
     def set_word_at_rva(self, rva, word):
         """Set the word value at the file offset corresponding to the given RVA."""
         return self.set_bytes_at_rva(rva, self.get_data_from_word(word))
@@ -4941,12 +4942,12 @@ class PE:
     ##
     # Quad-Word get / set
     ##
-
+    # qword 에서 data 반환
     def get_data_from_qword(self, word):
         """Return a eight byte string representing the quad-word value. (little endian)."""
         return struct.pack('<Q', word)
 
-
+    # data 에서 qword 반환
     def get_qword_from_data(self, data, offset):
         """Convert eight bytes of data to a word (little endian)
 
@@ -4961,7 +4962,7 @@ class PE:
 
         return struct.unpack('<Q', data[offset*8:(offset+1)*8])[0]
 
-
+    # rva 에서 qword 반환
     def get_qword_at_rva(self, rva):
         """Return the quad-word value at the given RVA.
 
@@ -4974,7 +4975,7 @@ class PE:
         except PEFormatError:
             return None
 
-
+    # offset에서 qword 값 반환
     def get_qword_from_offset(self, offset):
         """Return the quad-word value at the given file offset. (little endian)"""
 
@@ -4983,12 +4984,12 @@ class PE:
 
         return self.get_qword_from_data(self.__data__[offset:offset+8], 0)
 
-
+    # rav에서 qword 값 반환
     def set_qword_at_rva(self, rva, qword):
         """Set the quad-word value at the file offset corresponding to the given RVA."""
         return self.set_bytes_at_rva(rva, self.get_data_from_qword(qword))
 
-
+    # qword에 offset 설정
     def set_qword_at_offset(self, offset, qword):
         """Set the quad-word value at the given file offset."""
         return self.set_bytes_at_offset(offset, self.get_data_from_qword(qword))
@@ -4999,7 +5000,7 @@ class PE:
     # Set bytes
     ##
 
-
+    # 지정된 rva에 대응하는 file offset을 byte로 overwrite 한다
     def set_bytes_at_rva(self, rva, data):
         """Overwrite, with the given string, the bytes at the file offset corresponding to the given RVA.
 
@@ -5016,7 +5017,7 @@ class PE:
 
         return self.set_bytes_at_offset(offset, data)
 
-
+    # 주어진 문자열이 있는 file offset을 byte로 overwrite 한다
     def set_bytes_at_offset(self, offset, data):
         """Overwrite the bytes at the given file offset with the given string.
 
@@ -5034,7 +5035,7 @@ class PE:
 
         return True
 
-
+    # 수정된 개별 section data로 PE image content를 업데이트 한다
     def merge_modified_section_data(self):
         """Update the PE image content with any individual section data that has been modified."""
 
@@ -5045,7 +5046,7 @@ class PE:
             if section_data_start < len(self.__data__) and section_data_end < len(self.__data__):
                 self.__data__ = self.__data__[:section_data_start] + section.get_data() + self.__data__[section_data_end:]
 
-
+    #인자로 반은 새 imagebase 를 사용하여 relocation information 을 적용한다.
     def relocate_image(self, new_ImageBase):
         """Apply the relocation information to the image using the provided new image base.
 
@@ -5139,12 +5140,12 @@ class PE:
                         entry.rva,
                         self.get_qword_at_rva(entry.rva) + relocation_difference)
 
-
+    # checksum 확인
     def verify_checksum(self):
 
         return self.OPTIONAL_HEADER.CheckSum == self.generate_checksum()
 
-
+    # checksum을 만들어서 반환
     def generate_checksum(self):
         # This will make sure that the data representing the PE image
         # is updated with any changes that might have been made by
@@ -5184,7 +5185,7 @@ class PE:
         #
         return checksum + len(self.__data__)
 
-
+    # exe 파일인지 확인
     def is_exe(self):
         """Check whether the file is a standard executable.
 
@@ -5200,7 +5201,7 @@ class PE:
 
         return False
 
-
+    # dll인지 확인
     def is_dll(self):
         """Check whether the file is a standard DLL.
 
@@ -5214,7 +5215,7 @@ class PE:
 
         return False
 
-
+    # 드라이버인지 확인
     def is_driver(self):
         """Check whether the file is a Windows driver.
 
@@ -5243,7 +5244,7 @@ class PE:
 
         return False
 
-
+    # 파일에 추가된 data의 offsett과 헤더에 정의되있지 않은 영역이 있는 data 의 offset을 가져온다. 
     def get_overlay_data_start_offset(self):
         """Get the offset of data appended to the file and not contained within the area described in the headers."""
 
@@ -5266,7 +5267,7 @@ class PE:
 
         return None
 
-
+    # 파일에 추가된 data와 헤더에 정의되있지 않은 영역이 있는 data를 가져온다.
     def get_overlay(self):
         """Get the data appended to the file and not contained within the area described in the headers."""
 
@@ -5277,7 +5278,7 @@ class PE:
 
         return None
 
-
+    # 오버레이된 data를 지우고 PE 헤어에 정의된 데이터를 반환한다.
     def trim(self):
         """Return the just data defined by the PE headers, removing any overlayed data."""
 
@@ -5302,6 +5303,7 @@ class PE:
     #  size, then FileAlignment must match SectionAlignment."
     #
     # The following is a hard-coded constant if the Windows loader
+    # FIleAlignment 를 조절한다
     def adjust_FileAlignment( self, val, file_alignment ):
         global FileAlignment_Warning
         if file_alignment > FILE_ALIGNEMNT_HARDCODED_VALUE:
