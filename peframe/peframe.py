@@ -79,16 +79,16 @@ def get_imphash(filename):
 def get_hash(filename):
 	fh = open(filename, 'rb') # 파일 열기
 	# md5, sha1, sha256의 값 저장
-	m = hashlib.md5() 
+	m = hashlib.md5()
 	s = hashlib.sha1()
 	s256 = hashlib.sha256()
-	
+
 	while True:
 		data = fh.read(8192) # 8192 바이트만큼 파일을 읽음
 		if not data: # data가 없으면 종료
 			break
 		# md5, sha1, sha256의 값 업데이트
-		m.update(data) 
+		m.update(data)
 		s.update(data)
 		s256.update(data)
 	# md5, sha1, sha256 설정
@@ -102,12 +102,12 @@ def get_hash(filename):
 		return md5,sha1,sha256,ih
 	except:
 		return md5,sha1,sha256
-	
+
 # pe파일의 정보를 반환
 def get_pe_fileinfo(pe, filename):
 	# is dll?
 	dll = pe.FILE_HEADER.IMAGE_FILE_DLL
-	
+
 	# num sections
 	nsec = pe.FILE_HEADER.NumberOfSections
 
@@ -124,12 +124,12 @@ def get_pe_fileinfo(pe, filename):
 
 	md5, sha1, sha256, imphash = get_hash(filename)
 	hash_info = {"md5": md5, "sha1": sha1, "sha256": sha256}
-	
+
 	detected = []
 
 	# directory list
 	dirlist = directories.get(pe)
-	
+
 	# digital signature
 	for sign in dirlist:
 		if sign == "security": detected.append("sign")
@@ -153,26 +153,26 @@ def get_pe_fileinfo(pe, filename):
 	# anti virtual machine
 	antivirtualmachine = antivm.get(filename)
 	if antivirtualmachine: detected.append("antivm")
-	
+
 	# api alert suspicious
 	apialert_info = apialert.get(pe, strings_match)
-	
+
 	# file and url
 	fileurl_info = fileurl.get(filename, strings_match)
 	file_info = fileurl_info["file"]
 	url_info = fileurl_info["url"]
 	ip_info = fileurl_info["ip"]
 	fuzzing_info = fileurl_info["fuzzing"]
-	
+
 	# meta info
 	meta_info = meta.get(pe)
-	
+
 	# import function
 	import_function = funcimport.get(pe)
 
 	# export function
 	export_function = funcexport.get(pe)
-	
+
 	# sections
 	sections_info = sections.get(pe)
 
@@ -196,29 +196,29 @@ def get_pe_fileinfo(pe, filename):
 							"import_hash": imphash,
 							"compile_time": str(tsdate),
 							"dll": dll,
-							"sections_number": nsec, 
-							"xor_info": xorcheck, 
-							"detected": detected, 
-							"directories": dirlist, 
-							"sign_info": cert.get(pe), 
-							"packer_info": packer, 
+							"sections_number": nsec,
+							"xor_info": xorcheck,
+							"detected": detected,
+							"directories": dirlist,
+							"sign_info": cert.get(pe),
+							"packer_info": packer,
 							"antidbg_info": apiantidbg.get(pe, strings_match),
 							"mutex_info": apimutex.get(pe, strings_match),
-							"antivm_info": antivirtualmachine, 
-							"apialert_info": apialert_info, 
-							"meta_info": meta_info, 
-							"import_function": import_function, 
-							"export_function": export_function, 
+							"antivm_info": antivirtualmachine,
+							"apialert_info": apialert_info,
+							"meta_info": meta_info,
+							"import_function": import_function,
+							"export_function": export_function,
 							"sections_info": sections_info,
 							"resources_info": resources_info
 							}
-						}, 
+						},
 						indent=4, separators=(',', ': '))
 # 파일의 정보를 반환
 def get_fileinfo(filename):
 	strings_info = json.loads(stringstat.get(filename))
 	all_strings = strings_info["content"]
-	
+
 	# file and url
 	fileurl_info = fileurl.get(filename, strings_match)
 	file_info = fileurl_info["file"]
@@ -233,22 +233,22 @@ def get_fileinfo(filename):
 	virustotal_info = virustotal.get(md5, strings_match)
 	# json으로 반환
 	return json.dumps({"peframe_ver": help.VERSION,
-						"file_type": ftype, 
-						"file_name": fname, 
-						"file_size": fsize, 
-						"hash": hash_info, 
+						"file_type": ftype,
+						"file_name": fname,
+						"file_size": fsize,
+						"hash": hash_info,
 						"file_found": file_info,
 						"url_found": url_info,
 						"ip_found": ip_info,
 						"virustotal": virustotal_info,
 						"fuzzing": fuzzing_info,
-						"pe_info": False}, 
+						"pe_info": False},
 						indent=4, separators=(',', ': '))
 
 # 기본출력
 def stdoutput(get_info_from):
 	output = json.loads(get_info_from)
-	
+
 	print "Peframe v.", output['peframe_ver']
 	print
 	print "Short information"
@@ -267,7 +267,7 @@ def stdoutput(get_info_from):
 	if output['pe_info']:
 		for item in output['pe_info']:
 			if output['pe_info'][item]:
-				
+
 				if item == 'detected':
 					print "Detected".ljust(15), ', '.join(output['pe_info'][item])
 
@@ -432,8 +432,8 @@ def stdoutput(get_info_from):
 #______________________Main______________________
 
 def main():
-	# 옵션 개수가 0개거나 3개이상일떄 help 실행 
-	if len(sys.argv) == 1 or len(sys.argv) > 3:
+	# 옵션 개수가 0개거나 3개이상일떄 help 실행
+	if len(sys.argv) == 1:
 		help.help()
 		exit(0)
 	# 옵션이 1개이고 -h 나 --help 일때 help 실행
@@ -444,10 +444,10 @@ def main():
 	if len(sys.argv) == 2 and sys.argv[1] == "-v" or sys.argv[1] == "--version":
 		print help.VERSION
 		exit(0)
-	
+
 	# 파일이름의 절대경로를 받어 _ROOT에 저장
 	_ROOT = os.path.abspath(os.path.dirname(__file__))
-	
+
 	# 경로 연결후 반환
 	def get_data(path):
 		return os.path.join(_ROOT, 'signatures', path)
@@ -464,7 +464,7 @@ def main():
 	userdb = get_data('userdb.txt')
 
 	global filename, fname, fsize, ftype, pe
-	
+
 	# Auto Analysis
 	if len(sys.argv) == 2:
 		filename = sys.argv[1]
@@ -479,26 +479,41 @@ def main():
 			stdoutput(get_fileinfo(filename)); exit(0)
 
 	# Options
-	if len(sys.argv) == 3:
-		option   = sys.argv[1]
-		filename = sys.argv[2]
-		isfile(filename)
-		fname = os.path.basename(filename)
-		fsize = os.path.getsize(filename)
-		ftype = filetype(filename)
-		if option == "--json":
-			if re.match(r'^PE[0-9]{2}|^MS-DOS', ftype):
-				pe = pefile.PE(filename)
-				print get_pe_fileinfo(pe, filename); exit(0)
-			else:
-				print get_fileinfo(filename); exit(0)
-		elif option == "--strings":
-			print stringstat.get(filename); exit(0)
+	if len(sys.argv) >= 3:
+		if sys.argv[1] == "--json" or sys.argv[1] == "--strings" :
+			option = sys.argv[1]
+			for i in range(2, len(sys.argv)):
+				filename = sys.argv[i]
+				isfile(filename)
+				fname = os.path.basename(filename)
+				fsize = os.path.getsize(filename)
+				ftype = filetype(filename)
+				print('==========%d번째 파일 분석결괴==========' %(i-1))
+				if option == "--json":
+					if re.match(r'^PE[0-9]{2}|^MS-DOS', ftype):
+						pe = pefile.PE(filename)
+						print get_pe_fileinfo(pe, filename);
+					else:
+						print get_fileinfo(filename);
+				elif option == "--strings":
+					print stringstat.get(filename);
+				else:
+					help.help()
+			exit(0)
 		else:
-			help.help()
-	else:
-		help.help()
+			for i in range(1, len(sys.argv)):
+				print('==========%d번째 파일 분석결괴==========' %(i))
+				filename = sys.argv[i]
+				isfile(filename)
+				fname = os.path.basename(filename) #파일 이름
+				fsize = os.path.getsize(filename) #파일 사이즈
+				ftype = filetype(filename) # 파일 타입
+				if re.match(r'^PE[0-9]{2}|^MS-DOS', ftype):
+					pe = pefile.PE(filename)
+					stdoutput(get_pe_fileinfo(pe, filename));
+				else:
+					stdoutput(get_fileinfo(filename));
+			exit(0)
 
 if __name__ == '__main__':
-	main()
-
+		main()
