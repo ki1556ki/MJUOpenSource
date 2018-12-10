@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 # This file is part of PEframe.
 #
@@ -45,4 +45,3 @@ def get(filename):
 		array += string
 	PEtoStr.close()
 	return array
-

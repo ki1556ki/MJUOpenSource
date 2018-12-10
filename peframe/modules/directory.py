@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pefile
 
 '''전체 메소드 설명 - 각 메소드마다 pefile형식을 pe파라미터로 받아 각 get_이름 대로로 변수를 만들어 처음에 DIRECTORY_ENTRY_이름[0]의 struct넣는다
@@ -15,7 +16,7 @@ def get_import(pe):
 				imports = pe.DIRECTORY_ENTRY_IMPORT
 			except:
 				return False
-	
+
 	return imports
 
 def get_export(pe):

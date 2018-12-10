@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # mutex키값을 antidbgs에 넣어주고 array문자열 배열뒤에 새로운 문자열을 추가하고 리스트, 정렬함
 def get(pe, strings_match):
 	# antidbgs안에 딕셔너리 형식의strings_match에서 key값인 mutex의 value값을 찾아 넣어줌

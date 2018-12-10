@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # json 형식 사용을 위한 임폴트
 import json
 

@@ -1166,7 +1166,7 @@ class SectionStructure(Structure):
 
         if sha512 is not None:
             return sha512( self.get_data() ).hexdigest()
--
+
     #md5 값을 반환
     def get_hash_md5(self):
         """Get the MD5 hex-digest of the section's data."""
@@ -1746,7 +1746,7 @@ class PE:
         ('I,TimeDateStamp', 'H,OffsetModuleName', 'H,Reserved') )
 
     # 초기화
-    def __init__(self, name=None, data=None, fast_load=None):
+    def __init__(self, name=None, data=None, fast_load=None):
 
         self.sections = []
 

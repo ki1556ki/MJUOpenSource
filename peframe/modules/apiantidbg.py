@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # get함수, pe, strings_match를 파라미터로 가지며 array를 리스트로만들어 정렬한다음 리턴
 def get(pe, strings_match):
-	# antidbgs에 딕셔너리형식인strigns_match의 키값인 antidbg의 value값을 찾아서 넣어줌 
+	# antidbgs에 딕셔너리형식인strigns_match의 키값인 antidbg의 value값을 찾아서 넣어줌
 	antidbgs = strings_match['antidbg']
 	array = []
 	# pe에 DIRECTORY_ENTRY_IMPORT변수가 있다면 참 없다면 거짓을 판별하여 DEI에 넣어줌

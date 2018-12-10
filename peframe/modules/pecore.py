@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 # This file is part of PEframe.
 #
@@ -63,15 +63,15 @@ def get_antidbg(pe):
 def get_xor(pe):
 	show_xor = xor.get(pe)
 	return json.dumps({"Xor": show_xor[0], "Offset": show_xor[1]}, indent=4, separators=(',', ': '))
-# anti vm getter		
+# anti vm getter
 def get_antivm(filename):
 	show_antivm = antivm.get(filename)
 	return json.dumps({"Anti VM": show_antivm}, indent=4, separators=(',', ': '))
-# api alert getter	
+# api alert getter
 def get_apialert(pe):
 	show_apialert = apialert.get(pe)
 	return json.dumps({"Suspicious API": show_apialert}, indent=4, separators=(',', ': '))
-# secalert getter		
+# secalert getter
 def get_secalert(pe):
 	show_secalert = secalert.get(pe)
 	return json.dumps({"Suspicious Sections": show_secalert}, indent=4, separators=(',', ': '))
@@ -79,7 +79,7 @@ def get_secalert(pe):
 def get_fileurl(filename):
 	show_fileurl = fileurl.get(filename)
 	return json.dumps({"File Name": show_fileurl[0], "Url": show_fileurl[1]}, indent=4, separators=(',', ': '))
-#meta getter		
+#meta getter
 def get_meta(pe):
 	show_meta = meta.get(pe)
 	return json.dumps({"Meta Data": show_meta}, indent=4, separators=(',', ': '))

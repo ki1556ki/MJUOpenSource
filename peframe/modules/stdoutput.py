@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 # This file is part of PEframe.
 #
@@ -24,7 +24,7 @@ import pecore
 def show_import(pe):
 	import_load = json.loads(pecore.get_import(pe))
 	imported = import_load["Imported Functions"]
-	
+
 	if imported:
 		nfunc = len(imported)
 
@@ -33,23 +33,23 @@ def show_import(pe):
 			dlllist.append(dll[0])
 
 		ndll = len(set(dlllist))
-		
+
 		print "Imported [" + str(ndll) + "] DLL and [" + str(nfunc) + "] Functions"
 		print "-"*60
-	
+
 		for item in imported:
 			print item[0].ljust(18), item[1], item[2]
-		
+
 def show_export(pe):
 	export_load = json.loads(pecore.get_export(pe))
 	exported = export_load["Exported Functions"]
-	
+
 	if exported:
 		nfunc = len(exported)
 
 		print "Exported [" + str(nfunc) + "] Functions"
 		print "-"*60
-	
+
 		for item in exported:
 			print item[0].ljust(18), item[1]
 
@@ -181,14 +181,14 @@ def show_auto(info,cert_dump,peid,antidbg,antivm,xor,apialert,sectionsalert,file
 				for filename in file_matched[i][1]:
 					file_found.append([file_matched[i][0], filename])
 
-			print "\nFile name discovered ["+str(len(file_found))+"]" 
+			print "\nFile name discovered ["+str(len(file_found))+"]"
 			print "-"*60
 			for item in file_found:
 				print item[0].ljust(18), item[1]
-			
+
 			"""
 			# Alternative
-			
+
 			 count = 0
 			 for filename in file_matched[i][1]:
 				count = count + 1

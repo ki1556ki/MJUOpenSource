@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 try:
 	import pefile
 	import peutils

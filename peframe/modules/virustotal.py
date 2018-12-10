@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 # The MIT License (MIT)
 #
@@ -47,10 +47,9 @@ def get(tosearch, strings_match):
 			permalink = response['permalink']
 			positives = response['positives']
 			total = response['total']
-			
+
 			return {"scan_date":  scan_date, "total": total, "positives": positives, "permalink": permalink}
 		else:
 			return {}
 	else:
 		return {}
-

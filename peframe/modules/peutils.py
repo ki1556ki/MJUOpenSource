@@ -576,6 +576,3 @@ def is_probably_packed( pe ):
         has_significant_amount_of_compressed_data = True
 
     return has_significant_amount_of_compressed_data
-
-
-

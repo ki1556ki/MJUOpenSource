@@ -57,6 +57,7 @@ from modules import funcexport
 from modules import stringstat
 from modules import virustotal
 
+
 # 파일이 있는지 확인
 def isfile(filename):
 	if os.path.isfile(filename):
@@ -276,7 +277,7 @@ def stdoutput(get_info_from):
 					if output['pe_info'][item] > 0:
 						x = 0
 						for suspicious in output['pe_info']['sections_info']:
-					if suspicious['suspicious']:
+							if suspicious['suspicious']:
 								x = x+1
 					print "Sections".ljust(15), output['pe_info'][item], '('+str(x)+' suspicious)'
 

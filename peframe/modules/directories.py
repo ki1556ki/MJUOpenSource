@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pefile
 
 # pe.(구조체(매소드)).맴버변수로 이루어짐. 아마도 각각의 변수명 import, export등 대로 DIRECTORY_EXTRY의 key값의 가상 주소를 가져와 이게 거짓이면(주소에값이없으면) dirlist뒤에 추가하여 리턴해줌
@@ -16,9 +17,9 @@ def get(pe):
 	dir_relocation = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_BASERELOC']].VirtualAddress
 	# PointerToRelocations, NumberOfRelocations, NumberOfLinenumbers
 	dir_security = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
-	
+
 	dirlist   = []
-	
+
 	if dir_import:
 		dirlist.append("import")
 	if dir_export:
@@ -33,6 +34,5 @@ def get(pe):
 		dirlist.append("relocation")
 	if dir_security:
 		dirlist.append("security")
-			
+
 	return dirlist
-		return {}

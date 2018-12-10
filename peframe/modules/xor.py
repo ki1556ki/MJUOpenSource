@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 # The MIT License (MIT)
 #
@@ -25,27 +25,27 @@
 
 import array
 import binascii
- 
+
 def xor_delta(s, key_len = 1):
     delta = array.array('B', s)
-     
+
     for x in xrange(key_len, len(s)):
         delta[x - key_len] ^= delta[x]
-         
+
     """ return the delta as a string """
     return delta.tostring()[:-key_len]
- 
+
 def get(filename):
 	check = {}
 	search_file = open(filename, "r").read()
 	key_lengths=[1,2,4,8]
 	search_string = "This program cannot be run in DOS mode."
-	 
+
 	for l in key_lengths:
 		key_delta = xor_delta(search_string, l)
-		 
+
 		doc_delta = xor_delta(search_file, l)
-		 
+
 		offset = -1
 		while(True):
 			offset += 1
