@@ -432,15 +432,15 @@ def stdoutput(get_info_from):
 #______________________Main______________________
 
 def main():
-	# 옵션 개수가 0개거나 3개이상일떄 help 실행
-	if len(sys.argv) == 1:
+	# 인자 개수가 0개거나 3개이상일떄 help 실행
+	if len(sys.argv) == 1: # len(sys.argv) > 3: 을 삭제
 		help.help()
 		exit(0)
-	# 옵션이 1개이고 -h 나 --help 일때 help 실행
+	# 인자가 1개이고 -h 나 --help 일때 help 실행
 	if len(sys.argv) == 2 and sys.argv[1] == "-h" or sys.argv[1] == "--help":
 		help.help()
 		exit(0)
-	# 옵션이 1개이고 -v나 --verionh 일때 version 출력
+	# 인자이가 1개이고 -v나 --verionh 일때 version 출력
 	if len(sys.argv) == 2 and sys.argv[1] == "-v" or sys.argv[1] == "--version":
 		print help.VERSION
 		exit(0)
@@ -479,29 +479,30 @@ def main():
 			stdoutput(get_fileinfo(filename)); exit(0)
 
 	# Options
-	if len(sys.argv) >= 3:
-		if sys.argv[1] == "--json" or sys.argv[1] == "--strings" :
-			option = sys.argv[1]
-			for i in range(2, len(sys.argv)):
-				filename = sys.argv[i]
-				isfile(filename)
-				fname = os.path.basename(filename)
-				fsize = os.path.getsize(filename)
-				ftype = filetype(filename)
+	if len(sys.argv) >= 3: #인자가 3개 이상일떄
+		if sys.argv[1] == "--json" or sys.argv[1] == "--strings" : # 1번째 인자가 해당 옵션일때 실행
+			option = sys.argv[1] # 옵션변수에 저장
+			for i in range(2, len(sys.argv)): # 나머지 인자의 개수만큼 반복
+				filename = sys.argv[i] # 파일 저장
+				isfile(filename) # 파일인지 확인
+				fname = os.path.basename(filename) # 파일 이름 저장
+				fsize = os.path.getsize(filename) # 파일 사이즈 저장
+				ftype = filetype(filename) # 파일 타입 저장
 				print('==========%d번째 파일 분석결괴==========' %(i-1))
-				if option == "--json":
+				if option == "--json": # 옵션이 --json 일때 분석
 					if re.match(r'^PE[0-9]{2}|^MS-DOS', ftype):
 						pe = pefile.PE(filename)
 						print get_pe_fileinfo(pe, filename);
 					else:
 						print get_fileinfo(filename);
-				elif option == "--strings":
+				elif option == "--strings": # 옵션이 --strings 일때 분
 					print stringstat.get(filename);
 				else:
 					help.help()
-			exit(0)
-		else:
-			for i in range(1, len(sys.argv)):
+			exit(0) # 끝나면 종료
+
+		else: # 해당 옵션이 아닐때
+			for i in range(1, len(sys.argv)): # 파일 개수만큼 반복
 				print('==========%d번째 파일 분석결괴==========' %(i))
 				filename = sys.argv[i]
 				isfile(filename)
